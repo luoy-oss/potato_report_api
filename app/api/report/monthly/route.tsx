@@ -384,7 +384,9 @@ export async function POST(req: NextRequest) {
                 >
                   {data.weekly_stats.map((week, index) => {
                     const weekNum = week.week_number ?? week.week ?? index + 1;
-                    const heightPercent = (week.total_minutes / maxWeeklyMinutes) * 100;
+                    const value = week.total_minutes;
+                    const scaledSpacer = Math.round((maxWeeklyMinutes - value) * 100 / maxWeeklyMinutes);
+                    const scaledBar = Math.round(value * 100 / maxWeeklyMinutes) || 1;
                     return (
                       <div
                         key={index}
@@ -395,19 +397,19 @@ export async function POST(req: NextRequest) {
                           alignItems: "center",
                         }}
                       >
-                        <div style={{ flex: 1 }} />
+                        <div style={{ flex: scaledSpacer }} />
                         <div
                           style={{
+                            flex: scaledBar,
+                            minHeight: "32px",
                             width: "100%",
                             maxWidth: "50px",
-                            height: `${Math.max(heightPercent, 20)}%`,
-                            minHeight: "32px",
                             background:
-                              week.total_minutes > 0
+                              value > 0
                                 ? `linear-gradient(180deg, ${colors.sky} 0%, #7EC8E3 100%)`
                                 : "#E8E8F0",
                             borderRadius: "10px 10px 4px 4px",
-                            boxShadow: week.total_minutes > 0 ? "0 2px 6px rgba(168, 216, 234, 0.4)" : "none",
+                            boxShadow: value > 0 ? "0 2px 6px rgba(168, 216, 234, 0.4)" : "none",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -416,14 +418,12 @@ export async function POST(req: NextRequest) {
                           <span
                             style={{
                               fontSize: "11px",
-                              color: week.total_minutes > 0 ? "#fff" : "#ACACAC",
+                              color: value > 0 ? "#fff" : "#ACACAC",
                               fontWeight: "700",
-                              textShadow: week.total_minutes > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
+                              textShadow: value > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
                             }}
                           >
-                            {week.total_minutes > 0
-                              ? `${Math.floor(week.total_minutes / 60)}h`
-                              : "-"}
+                            {value > 0 ? `${Math.floor(value / 60)}h` : "-"}
                           </span>
                         </div>
                         <span
@@ -474,7 +474,8 @@ export async function POST(req: NextRequest) {
                 >
                   {["日", "一", "二", "三", "四", "五", "六"].map((day, index) => {
                     const minutes = weekdayData[index] || 0;
-                    const heightPercent = (minutes / maxWeekdayMinutes) * 100;
+                    const scaledSpacer = Math.round((maxWeekdayMinutes - minutes) * 100 / maxWeekdayMinutes);
+                    const scaledBar = Math.round(minutes * 100 / maxWeekdayMinutes) || 1;
                     return (
                       <div
                         key={index}
@@ -485,13 +486,13 @@ export async function POST(req: NextRequest) {
                           alignItems: "center",
                         }}
                       >
-                        <div style={{ flex: 1 }} />
+                        <div style={{ flex: scaledSpacer }} />
                         <div
                           style={{
+                            flex: scaledBar,
+                            minHeight: "28px",
                             width: "100%",
                             maxWidth: "36px",
-                            height: `${Math.max(heightPercent, 20)}%`,
-                            minHeight: "28px",
                             background:
                               minutes > 0
                                 ? `linear-gradient(180deg, ${colors.pink} 0%, #FF7BAC 100%)`

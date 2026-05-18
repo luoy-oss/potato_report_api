@@ -192,7 +192,15 @@ export default function ReportTestPage() {
   "longest_session_minutes": 320,
   "streak_days": 15,
   "daily_stats": [
-    { "date": "2024-01-15", "total_minutes": 360, "session_count": 2 }
+    {
+      "date": "2024-01-15",
+      "total_minutes": 360,
+      "session_count": 2,
+      "sessions": [
+        { "start_time": "14:00", "end_time": "17:30", "duration_minutes": 210 },
+        { "start_time": "20:00", "end_time": "22:30", "duration_minutes": 150 }
+      ]
+    }
   ]
 }`}
               </pre>

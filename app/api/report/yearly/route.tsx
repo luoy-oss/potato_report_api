@@ -417,9 +417,10 @@ export async function POST(req: NextRequest) {
                   }}
                 >
                   {data.monthly_stats.map((month) => {
-                    const heightPercent =
-                      (month.total_minutes / maxMonthlyMinutes) * 100;
+                    const value = month.total_minutes;
                     const isTopMonth = topMonth?.month === month.month;
+                    const scaledSpacer = Math.round((maxMonthlyMinutes - value) * 100 / maxMonthlyMinutes);
+                    const scaledBar = Math.round(value * 100 / maxMonthlyMinutes) || 1;
                     return (
                       <div
                         key={month.month}
@@ -430,20 +431,20 @@ export async function POST(req: NextRequest) {
                           alignItems: "center",
                         }}
                       >
-                        <div style={{ flex: 1 }} />
+                        <div style={{ flex: scaledSpacer }} />
                         <div
                           style={{
+                            flex: scaledBar,
+                            minHeight: "24px",
                             width: "100%",
                             maxWidth: "36px",
-                            height: `${Math.max(heightPercent, 18)}%`,
-                            minHeight: "24px",
                             background: isTopMonth
                               ? `linear-gradient(180deg, ${colors.gold} 0%, ${colors.orange} 100%)`
-                              : month.total_minutes > 0
+                              : value > 0
                               ? `linear-gradient(180deg, ${colors.mint} 0%, #7DDBA3 100%)`
                               : "#E8E8F0",
                             borderRadius: "8px 8px 4px 4px",
-                            boxShadow: month.total_minutes > 0 ? "0 2px 6px rgba(168, 230, 207, 0.4)" : "none",
+                            boxShadow: value > 0 ? "0 2px 6px rgba(168, 230, 207, 0.4)" : "none",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -452,14 +453,12 @@ export async function POST(req: NextRequest) {
                           <span
                             style={{
                               fontSize: "9px",
-                              color: month.total_minutes > 0 ? "#fff" : "#ACACAC",
+                              color: value > 0 ? "#fff" : "#ACACAC",
                               fontWeight: "700",
-                              textShadow: month.total_minutes > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
+                              textShadow: value > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
                             }}
                           >
-                            {month.total_minutes > 0
-                              ? `${Math.floor(month.total_minutes / 60)}h`
-                              : "-"}
+                            {value > 0 ? `${Math.floor(value / 60)}h` : "-"}
                           </span>
                         </div>
                         <span
@@ -510,8 +509,9 @@ export async function POST(req: NextRequest) {
                 >
                   {weekdayData.length > 0
                     ? weekdayData.map((day) => {
-                        const heightPercent =
-                          (day.total_minutes / maxWeekdayMinutes) * 100;
+                        const value = day.total_minutes;
+                        const scaledSpacer = Math.round((maxWeekdayMinutes - value) * 100 / maxWeekdayMinutes);
+                        const scaledBar = Math.round(value * 100 / maxWeekdayMinutes) || 1;
                         return (
                           <div
                             key={day.weekday}
@@ -522,19 +522,19 @@ export async function POST(req: NextRequest) {
                               alignItems: "center",
                             }}
                           >
-                            <div style={{ flex: 1 }} />
+                            <div style={{ flex: scaledSpacer }} />
                             <div
                               style={{
+                                flex: scaledBar,
+                                minHeight: "22px",
                                 width: "100%",
                                 maxWidth: "30px",
-                                height: `${Math.max(heightPercent, 18)}%`,
-                                minHeight: "22px",
                                 background:
-                                  day.total_minutes > 0
+                                  value > 0
                                     ? `linear-gradient(180deg, ${colors.peach} 0%, #FFB896 100%)`
                                     : "#E8E8F0",
                                 borderRadius: "6px 6px 3px 3px",
-                                boxShadow: day.total_minutes > 0 ? "0 2px 6px rgba(255, 211, 182, 0.4)" : "none",
+                                boxShadow: value > 0 ? "0 2px 6px rgba(255, 211, 182, 0.4)" : "none",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -543,14 +543,12 @@ export async function POST(req: NextRequest) {
                               <span
                                 style={{
                                   fontSize: "9px",
-                                  color: day.total_minutes > 0 ? "#fff" : "#ACACAC",
+                                  color: value > 0 ? "#fff" : "#ACACAC",
                                   fontWeight: "700",
-                                  textShadow: day.total_minutes > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
+                                  textShadow: value > 0 ? "0 1px 2px rgba(0,0,0,0.2)" : "none",
                                 }}
                               >
-                                {day.total_minutes > 0
-                                  ? `${Math.floor(day.total_minutes / 60)}h`
-                                  : "-"}
+                                {value > 0 ? `${Math.floor(value / 60)}h` : "-"}
                               </span>
                             </div>
                             <span
@@ -576,13 +574,13 @@ export async function POST(req: NextRequest) {
                             alignItems: "center",
                           }}
                         >
-                          <div style={{ flex: 1 }} />
+                          <div style={{ flex: 100 }} />
                           <div
                             style={{
+                              flex: 1,
+                              minHeight: "22px",
                               width: "100%",
                               maxWidth: "30px",
-                              height: "18%",
-                              minHeight: "22px",
                               background: "#E8E8F0",
                               borderRadius: "6px 6px 3px 3px",
                               display: "flex",
