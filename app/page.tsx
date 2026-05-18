@@ -181,7 +181,7 @@ export default function ReportTestPage() {
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
   "streamer_name": "小可爱主播",
-  "avatar_url": "头像URL (可选)",
+  "avatar_url": "https://api.dicebear.com/7.x/adventurer/svg?seed=cute",
   "week_start": "2024-01-15",
   "week_end": "2024-01-21",
   "total_stream_minutes": 2580,
@@ -200,6 +200,52 @@ export default function ReportTestPage() {
         { "start_time": "14:00", "end_time": "17:30", "duration_minutes": 210 },
         { "start_time": "20:00", "end_time": "22:30", "duration_minutes": 150 }
       ]
+    },
+    {
+      "date": "2024-01-16",
+      "total_minutes": 420,
+      "session_count": 1,
+      "sessions": [
+        { "start_time": "19:00", "end_time": "02:00", "duration_minutes": 420, "crosses_midnight": true }
+      ]
+    },
+    {
+      "date": "2024-01-17",
+      "total_minutes": 0,
+      "session_count": 0,
+      "sessions": []
+    },
+    {
+      "date": "2024-01-18",
+      "total_minutes": 480,
+      "session_count": 2,
+      "sessions": [
+        { "start_time": "10:00", "end_time": "12:00", "duration_minutes": 120 },
+        { "start_time": "20:00", "end_time": "02:00", "duration_minutes": 360, "crosses_midnight": true }
+      ]
+    },
+    {
+      "date": "2024-01-19",
+      "total_minutes": 540,
+      "session_count": 1,
+      "sessions": [
+        { "start_time": "18:00", "end_time": "03:00", "duration_minutes": 540, "crosses_midnight": true }
+      ]
+    },
+    {
+      "date": "2024-01-20",
+      "total_minutes": 480,
+      "session_count": 2,
+      "sessions": [
+        { "start_time": "13:00", "end_time": "16:00", "duration_minutes": 180 },
+        { "start_time": "21:00", "end_time": "02:00", "duration_minutes": 300, "crosses_midnight": true }
+      ]
+    },
+    {
+      "date": "2024-01-21",
+      "total_minutes": 0,
+      "session_count": 0,
+      "sessions": []
     }
   ]
 }`}
