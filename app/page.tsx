@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 type ReportType = "weekly" | "monthly" | "yearly";
@@ -9,19 +8,16 @@ type ReportType = "weekly" | "monthly" | "yearly";
 const reportConfig = {
   weekly: {
     label: "周报",
-    icon: "📅",
     color: "from-pink-400 to-purple-400",
     borderColor: "border-pink-300",
   },
   monthly: {
     label: "月报",
-    icon: "📊",
     color: "from-purple-400 to-indigo-400",
     borderColor: "border-purple-300",
   },
   yearly: {
     label: "年度总结",
-    icon: "🎉",
     color: "from-amber-400 to-orange-400",
     borderColor: "border-amber-300",
   },
@@ -55,7 +51,6 @@ export default function ReportTestPage() {
         {/* 标题区域 */}
         <div className="text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 shadow-sm backdrop-blur">
-            <span className="text-2xl">✨</span>
             <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text font-medium text-transparent">
               直播数据报告
             </span>
@@ -88,7 +83,6 @@ export default function ReportTestPage() {
                 }`}
               >
                 <span className="flex items-center gap-2">
-                  <span className="text-xl">{config.icon}</span>
                   <span>{config.label}</span>
                 </span>
               </button>
@@ -100,7 +94,6 @@ export default function ReportTestPage() {
         <Card className="overflow-hidden border-2 border-purple-100 bg-white/80 shadow-xl backdrop-blur">
           <CardHeader className="border-b border-purple-50 bg-gradient-to-r from-pink-50 to-purple-50">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">{reportConfig[selectedType].icon}</span>
               <div>
                 <CardTitle className="text-gray-800">
                   {reportConfig[selectedType].label}预览
@@ -132,7 +125,6 @@ export default function ReportTestPage() {
             )}
             {!imageUrl && !loading && (
               <div className="flex h-80 flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-purple-200 bg-purple-50/50">
-                <span className="text-4xl">🎨</span>
                 <span className="text-gray-500">点击上方按钮生成报告图片</span>
               </div>
             )}
@@ -143,7 +135,6 @@ export default function ReportTestPage() {
         <Card className="border-2 border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <span className="text-2xl">⚙️</span>
               <div>
                 <CardTitle className="text-amber-800">环境变量配置</CardTitle>
                 <CardDescription className="text-amber-700">
@@ -173,7 +164,6 @@ export default function ReportTestPage() {
         <Card className="border-2 border-purple-100 bg-white/80 backdrop-blur">
           <CardHeader className="border-b border-purple-50">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">📖</span>
               <div>
                 <CardTitle>API 使用说明</CardTitle>
                 <CardDescription>详细的接口文档</CardDescription>
@@ -183,7 +173,6 @@ export default function ReportTestPage() {
           <CardContent className="space-y-6 p-6">
             <div className="rounded-xl border border-pink-200 bg-pink-50/50 p-4">
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-lg">📅</span>
                 <h3 className="font-semibold text-pink-800">周报 API</h3>
               </div>
               <code className="block rounded-lg bg-white/80 p-3 text-sm font-medium text-pink-700">
@@ -191,17 +180,17 @@ export default function ReportTestPage() {
               </code>
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
-  "streamer_name": "主播名称",
+  "streamer_name": "小可爱主播",
   "avatar_url": "头像URL (可选)",
   "week_start": "2024-01-15",
   "week_end": "2024-01-21",
   "total_stream_minutes": 2580,
-  "stream_days": 6,
-  "session_count": 12,
+  "stream_days": 5,
+  "session_count": 8,
   "peak_hour": 20,
   "peak_hour_minutes": 480,
   "longest_session_minutes": 320,
-  "streak_days": 6,
+  "streak_days": 15,
   "daily_stats": [
     { "date": "2024-01-15", "total_minutes": 360, "session_count": 2 }
   ]
@@ -211,7 +200,6 @@ export default function ReportTestPage() {
 
             <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-4">
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-lg">📊</span>
                 <h3 className="font-semibold text-purple-800">月报 API</h3>
               </div>
               <code className="block rounded-lg bg-white/80 p-3 text-sm font-medium text-purple-700">
@@ -219,18 +207,21 @@ export default function ReportTestPage() {
               </code>
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
-  "streamer_name": "主播名称",
+  "streamer_name": "小可爱主播",
   "avatar_url": "头像URL (可选)",
   "month": "2024-01",
-  "total_stream_minutes": 9600,
-  "stream_days": 22,
-  "session_count": 45,
+  "total_stream_minutes": 10240,
+  "stream_days": 25,
+  "session_count": 48,
   "peak_hour": 21,
-  "peak_hour_minutes": 1800,
+  "peak_hour_minutes": 1920,
   "longest_session_minutes": 420,
-  "streak_days": 8,
+  "streak_days": 18,
   "weekly_stats": [
-    { "week_number": 1, "total_minutes": 1800, "session_count": 8 }
+    { "week_number": 1, "total_minutes": 2400, "session_count": 12 },
+    { "week_number": 2, "total_minutes": 2800, "session_count": 14 },
+    { "week_number": 3, "total_minutes": 2640, "session_count": 11 },
+    { "week_number": 4, "total_minutes": 2400, "session_count": 11 }
   ],
   "weekday_distribution": [960, 1440, 1680, 1440, 1920, 1440, 1360]
 }`}
@@ -239,7 +230,6 @@ export default function ReportTestPage() {
 
             <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-4">
               <div className="mb-3 flex items-center gap-2">
-                <span className="text-lg">🎉</span>
                 <h3 className="font-semibold text-amber-800">年度总结 API</h3>
               </div>
               <code className="block rounded-lg bg-white/80 p-3 text-sm font-medium text-amber-700">
@@ -247,7 +237,7 @@ export default function ReportTestPage() {
               </code>
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
-  "streamer_name": "主播名称",
+  "streamer_name": "小可爱主播",
   "avatar_url": "头像URL (可选)",
   "year": 2024,
   "total_stream_minutes": 108000,
@@ -258,7 +248,18 @@ export default function ReportTestPage() {
   "longest_session_minutes": 720,
   "longest_streak_days": 45,
   "monthly_stats": [
-    { "month": 1, "total_minutes": 8400, "stream_days": 22 }
+    { "month": 1, "total_minutes": 8400, "stream_days": 22 },
+    { "month": 2, "total_minutes": 7200, "stream_days": 20 },
+    { "month": 3, "total_minutes": 9600, "stream_days": 25 },
+    { "month": 4, "total_minutes": 8400, "stream_days": 22 },
+    { "month": 5, "total_minutes": 10800, "stream_days": 28 },
+    { "month": 6, "total_minutes": 9000, "stream_days": 24 },
+    { "month": 7, "total_minutes": 10200, "stream_days": 26 },
+    { "month": 8, "total_minutes": 9600, "stream_days": 25 },
+    { "month": 9, "total_minutes": 8400, "stream_days": 22 },
+    { "month": 10, "total_minutes": 9000, "stream_days": 24 },
+    { "month": 11, "total_minutes": 8400, "stream_days": 22 },
+    { "month": 12, "total_minutes": 9000, "stream_days": 24 }
   ],
   "top_streaming_months": [
     { "month": 5, "total_minutes": 10800 }
@@ -272,7 +273,6 @@ export default function ReportTestPage() {
 
             <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
               <div className="flex items-start gap-3">
-                <span className="text-2xl">💡</span>
                 <div>
                   <h3 className="mb-1 font-semibold text-sky-800">返回说明</h3>
                   <p className="text-sm text-sky-700">

@@ -413,7 +413,6 @@ export async function POST(req: NextRequest) {
                   style={{
                     display: "flex",
                     flex: 1,
-                    alignItems: "flex-end",
                     gap: "6px",
                   }}
                 >
@@ -429,10 +428,9 @@ export async function POST(req: NextRequest) {
                           display: "flex",
                           flexDirection: "column",
                           alignItems: "center",
-                          height: "100%",
-                          justifyContent: "flex-end",
                         }}
                       >
+                        <div style={{ flex: 1 }} />
                         <div
                           style={{
                             width: "100%",
@@ -507,7 +505,6 @@ export async function POST(req: NextRequest) {
                   style={{
                     display: "flex",
                     flex: 1,
-                    alignItems: "flex-end",
                     gap: "6px",
                   }}
                 >
@@ -523,10 +520,9 @@ export async function POST(req: NextRequest) {
                               display: "flex",
                               flexDirection: "column",
                               alignItems: "center",
-                              height: "100%",
-                              justifyContent: "flex-end",
                             }}
                           >
+                            <div style={{ flex: 1 }} />
                             <div
                               style={{
                                 width: "100%",
@@ -578,10 +574,9 @@ export async function POST(req: NextRequest) {
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
-                            height: "100%",
-                            justifyContent: "flex-end",
                           }}
                         >
+                          <div style={{ flex: 1 }} />
                           <div
                             style={{
                               width: "100%",
