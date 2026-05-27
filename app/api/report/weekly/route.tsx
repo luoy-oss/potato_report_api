@@ -116,6 +116,13 @@ export async function POST(req: NextRequest) {
 
     const data: WeeklyReportRequest = JSON.parse(dataStr);
 
+    // 调试日志：打印接收到的数据
+    console.log("[report-api] ====== 接收到的原始数据 ======");
+    console.log("[report-api] streamer_name:", data.streamer_name);
+    console.log("[report-api] week_start:", data.week_start, "week_end:", data.week_end);
+    console.log("[report-api] daily_stats:", JSON.stringify(data.daily_stats, null, 2));
+    console.log("[report-api] timezone offset:", getTimezoneOffset());
+
     if (!data.streamer_name || !data.week_start || !data.week_end) {
       return new Response(
         JSON.stringify({ success: false, error: "缺少必要字段" }),
@@ -157,6 +164,19 @@ export async function POST(req: NextRequest) {
       const dayIndex = targetDate.getUTCDay();
       return { ...day, weekDay, dayIndex };
     });
+
+    // 调试日志：打印处理后的数据
+    console.log("[report-api] ====== 处理后的数据 ======");
+    console.log("[report-api] dailyData:", JSON.stringify(dailyData.map(d => ({
+      date: d.date,
+      weekDay: d.weekDay,
+      dayIndex: d.dayIndex,
+      sessions: d.sessions?.map(s => ({
+        start_time: s.start_time,
+        end_time: s.end_time,
+        duration_minutes: s.duration_minutes,
+      }))
+    })), null, 2));
 
     const backgroundUrl = process.env.REPORT_BACKGROUND_URL;
 
