@@ -331,7 +331,7 @@ export default function ReportTestPage() {
                   </p>
                   <ul className="mt-2 space-y-1 text-sm text-emerald-700">
                     <li>• URL 格式：图片链接地址</li>
-                    <li>• Base64 格式：<code className="rounded bg-emerald-100 px-1">data:image/...;base64,...></code></li>
+                    <li>• Base64 格式：<code className="rounded bg-emerald-100 px-1">{"data:image/...;base64,..."}</code></li>
                   </ul>
                 </div>
               </div>
