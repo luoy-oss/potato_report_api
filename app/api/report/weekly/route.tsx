@@ -5,6 +5,24 @@ import { formatDuration, formatHour } from "@/lib/types/report";
 
 export const runtime = "edge";
 
+// 获取图片并转换为 base64
+async function fetchImageAsBase64(url: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+    const buffer = await response.arrayBuffer();
+    const contentType = response.headers.get("content-type") || "image/png";
+    const base64 = Buffer.from(buffer).toString("base64");
+    return `data:${contentType};base64,${base64}`;
+  } catch {
+    return url; // 如果获取失败，返回原始 URL
+  }
+}
+
+// 判断是否为 base64 格式
+function isBase64(str: string): boolean {
+  return str.startsWith("data:image/");
+}
+
 // 可爱风格的颜色配置
 const colors = {
   pink: "#FF9ECD",
@@ -54,6 +72,12 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ success: false, error: "缺少必要字段" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
+    }
+
+    // 处理头像：如果不是 base64，则先获取并转换
+    let avatarSrc = data.avatar;
+    if (avatarSrc && !isBase64(avatarSrc)) {
+      avatarSrc = await fetchImageAsBase64(avatarSrc);
     }
 
     const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
@@ -162,9 +186,9 @@ export async function POST(req: NextRequest) {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                {data.avatar ? (
+                {avatarSrc ? (
                   <img
-                    src={data.avatar}
+                    src={avatarSrc}
                     width={56}
                     height={56}
                     style={{
