@@ -62,11 +62,33 @@ const dayColors = [
   "#E8D5E8", // 周六 - 薰衣草
 ];
 
+// 获取配置的时区偏移（小时），默认东八区
+function getTimezoneOffset(): number {
+  const tz = process.env.REPORT_TIMEZONE || "Asia/Shanghai";
+  // 简单映射常见时区
+  const tzMap: Record<string, number> = {
+    "Asia/Shanghai": 8,
+    "Asia/Tokyo": 9,
+    "America/New_York": -5,
+    "America/Los_Angeles": -8,
+    "Europe/London": 0,
+    "UTC": 0,
+  };
+  return tzMap[tz] ?? 8; // 默认东八区
+}
+
 // 解析时间字符串为小时数（支持 HH:mm 或 ISO 8601）
 function parseTimeToHours(timeStr: string): number {
   if (timeStr.includes("T")) {
+    // ISO 8601 格式，解析后转换为目标时区
     const date = new Date(timeStr);
-    return date.getHours() + date.getMinutes() / 60;
+    const offset = getTimezoneOffset();
+    const utcHours = date.getUTCHours();
+    const utcMinutes = date.getUTCMinutes();
+    let targetHours = utcHours + offset;
+    if (targetHours >= 24) targetHours -= 24;
+    if (targetHours < 0) targetHours += 24;
+    return targetHours + utcMinutes / 60;
   }
   const [hours, minutes] = timeStr.split(":").map(Number);
   return hours + (minutes || 0) / 60;
@@ -121,9 +143,18 @@ export async function POST(req: NextRequest) {
     const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
     const dailyStats = data.daily_stats || [];
     const dailyData = dailyStats.map((day) => {
-      const date = new Date(day.date);
-      const weekDay = weekDays[date.getDay()];
-      const dayIndex = date.getDay();
+      // 直接解析 YYYY-MM-DD 格式
+      const [year, month, dateNum] = day.date.split("-").map(Number);
+      // 创建 UTC 日期
+      const utcDate = new Date(Date.UTC(year, month - 1, dateNum, 0, 0, 0));
+      const offset = getTimezoneOffset();
+      // 将 UTC 时间转换为目标时区的时间
+      // 对于东八区 (offset=8)，UTC 00:00 = 北京 08:00
+      // 所以日期不变，但星期几的计算应该基于时区时间
+      const offsetMs = offset * 60 * 60 * 1000;
+      const targetDate = new Date(utcDate.getTime() + offsetMs);
+      const weekDay = weekDays[targetDate.getUTCDay()];
+      const dayIndex = targetDate.getUTCDay();
       return { ...day, weekDay, dayIndex };
     });
 
