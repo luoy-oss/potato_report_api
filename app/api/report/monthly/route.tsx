@@ -12,16 +12,21 @@ async function fetchImageAsBase64(url: string): Promise<string> {
     const buffer = await response.arrayBuffer();
     const contentType = response.headers.get("content-type") || "image/png";
     // Edge Runtime 兼容的 base64 转换
-    const bytes = new Uint8Array(buffer);
-    let binary = "";
-    for (let i = 0; i < bytes.length; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    const base64 = btoa(binary);
+    const base64 = arrayBufferToBase64(buffer);
     return `data:${contentType};base64,${base64}`;
   } catch {
     return url; // 如果获取失败，返回原始 URL
   }
+}
+
+// ArrayBuffer 转 base64
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
 }
 
 // 判断是否为 base64 格式
@@ -42,7 +47,18 @@ const colors = {
 
 export async function POST(req: NextRequest) {
   try {
-    const data: MonthlyReportRequest = await req.json();
+    // 解析 multipart/form-data
+    const formData = await req.formData();
+    const dataStr = formData.get("data") as string;
+
+    if (!dataStr) {
+      return new Response(
+        JSON.stringify({ success: false, error: "缺少 data 字段" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const data: MonthlyReportRequest = JSON.parse(dataStr);
 
     if (!data.streamer_name || !data.month) {
       return new Response(
@@ -51,10 +67,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 处理头像：如果不是 base64，则先获取并转换
-    let avatarSrc = data.avatar;
-    if (avatarSrc && !isBase64(avatarSrc)) {
-      avatarSrc = await fetchImageAsBase64(avatarSrc);
+    // 处理头像文件
+    let avatarSrc: string | undefined;
+    const avatarFile = formData.get("avatar") as File | null;
+    if (avatarFile) {
+      const buffer = await avatarFile.arrayBuffer();
+      const base64 = arrayBufferToBase64(buffer);
+      const type = avatarFile.type || "image/png";
+      avatarSrc = `data:${type};base64,${base64}`;
+      console.log(`[report-api] 头像文件已接收: ${avatarFile.name}, type=${type}, size=${buffer.byteLength} bytes`);
+    } else {
+      // 兼容：如果 data 中有 avatar 字段（URL 或 base64）
+      avatarSrc = data.avatar;
+      if (avatarSrc && !isBase64(avatarSrc)) {
+        avatarSrc = await fetchImageAsBase64(avatarSrc);
+      }
     }
 
     const weeklyStats = data.weekly_stats || [];

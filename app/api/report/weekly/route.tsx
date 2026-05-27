@@ -29,6 +29,16 @@ function isBase64(str: string): boolean {
   return str.startsWith("data:image/");
 }
 
+// ArrayBuffer 转 base64
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
 // 可爱风格的颜色配置
 const colors = {
   pink: "#FF9ECD",
@@ -71,7 +81,18 @@ function formatTime(hours: number): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const data: WeeklyReportRequest = await req.json();
+    // 解析 multipart/form-data
+    const formData = await req.formData();
+    const dataStr = formData.get("data") as string;
+
+    if (!dataStr) {
+      return new Response(
+        JSON.stringify({ success: false, error: "缺少 data 字段" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const data: WeeklyReportRequest = JSON.parse(dataStr);
 
     if (!data.streamer_name || !data.week_start || !data.week_end) {
       return new Response(
@@ -80,10 +101,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 处理头像：如果不是 base64，则先获取并转换
-    let avatarSrc = data.avatar;
-    if (avatarSrc && !isBase64(avatarSrc)) {
-      avatarSrc = await fetchImageAsBase64(avatarSrc);
+    // 处理头像文件
+    let avatarSrc: string | undefined;
+    const avatarFile = formData.get("avatar") as File | null;
+    if (avatarFile) {
+      const buffer = await avatarFile.arrayBuffer();
+      const base64 = arrayBufferToBase64(buffer);
+      const type = avatarFile.type || "image/png";
+      avatarSrc = `data:${type};base64,${base64}`;
+      console.log(`[report-api] 头像文件已接收: ${avatarFile.name}, type=${type}, size=${buffer.byteLength} bytes`);
+    } else {
+      // 兼容：如果 data 中有 avatar 字段（URL 或 base64）
+      avatarSrc = data.avatar;
+      if (avatarSrc && !isBase64(avatarSrc)) {
+        avatarSrc = await fetchImageAsBase64(avatarSrc);
+      }
     }
 
     const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
