@@ -11,7 +11,13 @@ async function fetchImageAsBase64(url: string): Promise<string> {
     const response = await fetch(url);
     const buffer = await response.arrayBuffer();
     const contentType = response.headers.get("content-type") || "image/png";
-    const base64 = Buffer.from(buffer).toString("base64");
+    // Edge Runtime 兼容的 base64 转换
+    const bytes = new Uint8Array(buffer);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const base64 = btoa(binary);
     return `data:${contentType};base64,${base64}`;
   } catch {
     return url; // 如果获取失败，返回原始 URL
