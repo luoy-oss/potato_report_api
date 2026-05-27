@@ -34,7 +34,7 @@ export interface WeekdayDistribution {
 // 周报请求数据
 export interface WeeklyReportRequest {
   streamer_name: string;
-  avatar_url?: string;
+  avatar?: string; // 支持 URL 或 base64 (data:image/...;base64,...)
   week_start: string; // YYYY-MM-DD
   week_end: string;
   total_stream_minutes: number;
@@ -51,7 +51,7 @@ export interface WeeklyReportRequest {
 // 月报请求数据
 export interface MonthlyReportRequest {
   streamer_name: string;
-  avatar_url?: string;
+  avatar?: string; // 支持 URL 或 base64 (data:image/...;base64,...)
   month: string; // YYYY-MM
   total_stream_minutes: number;
   stream_days: number;
@@ -72,7 +72,7 @@ export interface MonthlyReportRequest {
 // 年度总结请求数据
 export interface YearlyReportRequest {
   streamer_name: string;
-  avatar_url?: string;
+  avatar?: string; // 支持 URL 或 base64 (data:image/...;base64,...)
   year: number;
   total_stream_minutes: number;
   total_stream_hours: number;

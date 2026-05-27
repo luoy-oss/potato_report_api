@@ -162,9 +162,9 @@ export async function POST(req: NextRequest) {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                {data.avatar_url ? (
+                {data.avatar ? (
                   <img
-                    src={data.avatar_url}
+                    src={data.avatar}
                     width={56}
                     height={56}
                     style={{
@@ -646,7 +646,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   const testData: WeeklyReportRequest = {
     streamer_name: "小可爱主播",
-    avatar_url: "https://api.dicebear.com/7.x/adventurer/svg?seed=cute",
+    avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=cute",
     week_start: "2024-01-15",
     week_end: "2024-01-21",
     total_stream_minutes: 2580,

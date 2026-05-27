@@ -151,9 +151,6 @@ export default function ReportTestPage() {
                 </code>
                 <div className="text-sm text-gray-600">
                   <p>设置报告图片的背景图 URL。如果不设置，将使用默认的渐变背景。</p>
-                  <p className="mt-2 text-amber-700">
-                    示例: <code className="rounded bg-amber-50 px-1">https://img.url/bg.webp</code>
-                  </p>
                 </div>
               </div>
             </div>
@@ -181,7 +178,7 @@ export default function ReportTestPage() {
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
   "streamer_name": "小可爱主播",
-  "avatar_url": "https://api.dicebear.com/7.x/adventurer/svg?seed=cute",
+  "avatar": "头像URL或base64 (可选)",
   "week_start": "2024-01-15",
   "week_end": "2024-01-21",
   "total_stream_minutes": 2580,
@@ -262,7 +259,7 @@ export default function ReportTestPage() {
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
   "streamer_name": "小可爱主播",
-  "avatar_url": "头像URL (可选)",
+  "avatar": "头像URL或base64 (可选)",
   "month": "2024-01",
   "total_stream_minutes": 10240,
   "stream_days": 25,
@@ -292,7 +289,7 @@ export default function ReportTestPage() {
               <pre className="mt-3 overflow-x-auto rounded-lg bg-white/80 p-4 text-xs text-gray-700">
 {`{
   "streamer_name": "小可爱主播",
-  "avatar_url": "头像URL (可选)",
+  "avatar": "头像URL或base64 (可选)",
   "year": 2024,
   "total_stream_minutes": 108000,
   "stream_days": 280,
@@ -323,6 +320,21 @@ export default function ReportTestPage() {
   ]
 }`}
               </pre>
+            </div>
+
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex items-start gap-3">
+                <div>
+                  <h3 className="mb-1 font-semibold text-emerald-800">头像字段说明</h3>
+                  <p className="text-sm text-emerald-700">
+                    <code className="rounded bg-emerald-100 px-1">avatar</code> 字段支持两种格式：
+                  </p>
+                  <ul className="mt-2 space-y-1 text-sm text-emerald-700">
+                    <li>• URL 格式：图片链接地址</li>
+                    <li>• Base64 格式：<code className="rounded bg-emerald-100 px-1">data:image/...;base64,...></code></li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <div className="rounded-xl border border-sky-200 bg-sky-50 p-4">
