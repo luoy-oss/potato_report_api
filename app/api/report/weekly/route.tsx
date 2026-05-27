@@ -87,7 +87,8 @@ export async function POST(req: NextRequest) {
     }
 
     const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
-    const dailyData = data.daily_stats.map((day) => {
+    const dailyStats = data.daily_stats || [];
+    const dailyData = dailyStats.map((day) => {
       const date = new Date(day.date);
       const weekDay = weekDays[date.getDay()];
       const dayIndex = date.getDay();

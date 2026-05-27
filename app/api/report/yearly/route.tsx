@@ -59,8 +59,9 @@ export async function POST(req: NextRequest) {
       avatarSrc = await fetchImageAsBase64(avatarSrc);
     }
 
+    const monthlyStats = data.monthly_stats || [];
     const maxMonthlyMinutes = Math.max(
-      ...data.monthly_stats.map((m) => m.total_minutes),
+      ...monthlyStats.map((m) => m.total_minutes),
       1
     );
 
@@ -446,7 +447,7 @@ export async function POST(req: NextRequest) {
                     gap: "6px",
                   }}
                 >
-                  {data.monthly_stats.map((month) => {
+                  {monthlyStats.map((month) => {
                     const value = month.total_minutes;
                     const isTopMonth = topMonth?.month === month.month;
                     const scaledSpacer = Math.round((maxMonthlyMinutes - value) * 100 / maxMonthlyMinutes);

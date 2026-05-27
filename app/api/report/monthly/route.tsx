@@ -57,8 +57,9 @@ export async function POST(req: NextRequest) {
       avatarSrc = await fetchImageAsBase64(avatarSrc);
     }
 
+    const weeklyStats = data.weekly_stats || [];
     const maxWeeklyMinutes = Math.max(
-      ...data.weekly_stats.map((w) => w.total_minutes),
+      ...weeklyStats.map((w) => w.total_minutes),
       1
     );
 
@@ -412,7 +413,7 @@ export async function POST(req: NextRequest) {
                     gap: "12px",
                   }}
                 >
-                  {data.weekly_stats.map((week, index) => {
+                  {weeklyStats.map((week, index) => {
                     const weekNum = week.week_number ?? week.week ?? index + 1;
                     const value = week.total_minutes;
                     const scaledSpacer = Math.round((maxWeeklyMinutes - value) * 100 / maxWeeklyMinutes);
